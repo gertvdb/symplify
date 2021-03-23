@@ -9,7 +9,7 @@ use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PHPStan\Analyser\Scope;
-use PHPStan\Reflection\MethodReflection;
+use PHPStan\Reflection\Php\PhpMethodReflection;
 use Symplify\Astral\Naming\SimpleNameResolver;
 
 final class ParentClassMethodGuard
@@ -45,6 +45,6 @@ final class ParentClassMethodGuard
         }
 
         $phpMethodReflection = $this->parentMethodResolver->resolve($scope, $classMethodName);
-        return $phpMethodReflection instanceof MethodReflection;
+        return $phpMethodReflection instanceof PhpMethodReflection;
     }
 }
