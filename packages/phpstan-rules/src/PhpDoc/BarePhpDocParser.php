@@ -46,6 +46,35 @@ final class BarePhpDocParser
     public function parseNodeToPhpDocTagNodes(Node $node): array
     {
         $phpDocNode = $this->parseNode($node);
+        if ($phpDocNode === null) {
+            return [];
+        }
+
+        return $this->resolvePhpDocTagNodes($phpDocNode);
+    }
+
+    /**
+     * @return PhpDocTagNode[]
+     */
+    public function parseDocBlockToPhpDocTagNodes(string $docBlock): array
+    {
+        $phpDocNode = $this->parseDocBlock($docBlock);
+        return $this->resolvePhpDocTagNodes($phpDocNode);
+    }
+
+    private function parseDocBlock(string $docBlock): PhpDocNode
+    {
+        $tokens = $this->lexer->tokenize($docBlock);
+        $tokenIterator = new TokenIterator($tokens);
+
+        return $this->phpDocParser->parse($tokenIterator);
+    }
+
+    /**
+     * @return PhpDocTagNode[]
+     */
+    private function resolvePhpDocTagNodes(PhpDocNode $phpDocNode): array
+    {
         if (! $phpDocNode instanceof PhpDocNode) {
             return [];
         }
@@ -60,13 +89,5 @@ final class BarePhpDocParser
         }
 
         return $phpDocTagNodes;
-    }
-
-    private function parseDocBlock(string $docBlock): PhpDocNode
-    {
-        $tokens = $this->lexer->tokenize($docBlock);
-        $tokenIterator = new TokenIterator($tokens);
-
-        return $this->phpDocParser->parse($tokenIterator);
     }
 }
