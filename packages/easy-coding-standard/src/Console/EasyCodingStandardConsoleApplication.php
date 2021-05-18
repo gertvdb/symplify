@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Symplify\EasyCodingStandard\Console;
 
+use Composer\InstalledVersions;
 use Composer\XdebugHandler\XdebugHandler;
 use Nette\Utils\Strings;
 use Symfony\Component\Console\Application;
@@ -106,8 +107,8 @@ final class EasyCodingStandardConsoleApplication extends Application
             require_once __DIR__ . '/../../vendor/composer/InstalledVersions.php';
         }
 
-        $installedRawData = \Composer\InstalledVersions::getRawData();
-        $ecsPackageData = isset($installedRawData['versions']['symplify/easy-coding-standard']) ? $installedRawData['versions']['symplify/easy-coding-standard'] : null;
+        $installedRawData = InstalledVersions::getRawData();
+        $ecsPackageData = $installedRawData['versions']['symplify/easy-coding-standard'] ?? null;
         if ($ecsPackageData === null) {
             return 'Unknown';
         }
